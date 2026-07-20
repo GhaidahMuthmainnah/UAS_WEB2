@@ -29,7 +29,7 @@ class MyOrderController extends Controller
             abort(403, 'Unauthorized access to this order.');
         }
 
-        $order->load(['customer', 'event', 'items.menu', 'items.package']);
+        $order->load(['customer', 'event', 'items.menu', 'items.package', 'deliverySchedule']);
         
         return view('myorder.show', [
             'title' => 'Faktur / Rincian Pesanan',

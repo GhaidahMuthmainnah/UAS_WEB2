@@ -22,4 +22,9 @@ class Order extends Model
     {
         return $this->hasOne(Event::class);
     }
+
+    public function deliverySchedule()
+    {
+        return $this->hasOne(DeliverySchedule::class);
+    }
 }

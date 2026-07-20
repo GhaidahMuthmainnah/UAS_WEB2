@@ -43,6 +43,31 @@
                     </div>
                 </div>
             </div>
+
+            @if($order->deliverySchedule)
+            <div class="card shadow-sm mb-4 border-0 border-top border-warning border-4">
+                <div class="card-body bg-light">
+                    <h5 class="card-title fw-bold"><i class='bx bxs-truck'></i> Lacak Pengiriman</h5>
+                    <div class="mt-3 text-center">
+                        @if($order->deliverySchedule->status == 'Scheduled')
+                            <span class="badge bg-secondary text-white fs-6 px-3 py-2 w-100 mb-2">Terjadwal</span>
+                        @elseif($order->deliverySchedule->status == 'EnRoute')
+                            <span class="badge bg-warning text-dark fs-6 px-3 py-2 w-100 mb-2 shadow-sm"><i class='bx bx-loader bx-spin'></i> Sedang Di Jalan</span>
+                        @elseif($order->deliverySchedule->status == 'Delivered')
+                            <span class="badge bg-success text-white fs-6 px-3 py-2 w-100 mb-2 shadow-sm"><i class='bx bx-check-double'></i> Sudah Sampai</span>
+                        @endif
+                    </div>
+                    <div class="mb-2 mt-3">
+                        <small class="text-muted d-block">Kurir / Driver</small>
+                        <span class="fw-semibold">{{ $order->deliverySchedule->driver_name ?? 'Belum Ditentukan' }}</span>
+                    </div>
+                    <div class="mb-0">
+                        <small class="text-muted d-block">Estimasi Pengantaran</small>
+                        <span>{{ \Carbon\Carbon::parse($order->deliverySchedule->delivery_time)->format('d M Y H:i') }} WIB</span>
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
 
         <!-- Rincian Pesanan (Invoice) -->

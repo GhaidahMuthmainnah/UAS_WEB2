@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             PackageSeeder::class,
             OrderSeeder::class,
+            DeliveryScheduleSeeder::class,
         ]);
     }
 }

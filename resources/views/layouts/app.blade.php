@@ -292,6 +292,13 @@
                         <span>Pesanan (Orders)</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('delivery.*') ? '' : 'collapsed' }}"
+                        href="{{ route('delivery.index') }}">
+                        <i class='bx bxs-truck'></i>
+                        <span>Pengiriman (Logistik)</span>
+                    </a>
+                </li>
             @endif
 
             @if (in_array(Auth::user()->role, ['Superadmin', 'Admin']))

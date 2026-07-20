@@ -32,6 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('/order', \App\Http\Controllers\OrderController::class)->only(['index', 'show'])->middleware('role:Superadmin,Admin,Staff');
     Route::patch('/order/{order}/status', [\App\Http\Controllers\OrderController::class, 'updateStatus'])->name('order.status')->middleware('role:Superadmin,Admin');
 
+    Route::get('/delivery', [\App\Http\Controllers\DeliveryScheduleController::class, 'index'])->name('delivery.index')->middleware('role:Superadmin,Admin,Staff');
+    Route::patch('/delivery/{delivery}/status', [\App\Http\Controllers\DeliveryScheduleController::class, 'updateStatus'])->name('delivery.status')->middleware('role:Superadmin,Admin,Staff');
+
     Route::get('/katalog', [\App\Http\Controllers\KatalogController::class, 'index'])->name('katalog.index');
     Route::resource('/myorder', \App\Http\Controllers\MyOrderController::class)->only(['index', 'show'])->middleware('role:Customer');
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
