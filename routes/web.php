@@ -28,7 +28,12 @@ Route::middleware('auth')->group(function () {
     
     Route::resource('/menu', \App\Http\Controllers\MenuController::class)->middleware('role:Superadmin,Admin');
     Route::resource('/package', \App\Http\Controllers\PackageController::class)->middleware('role:Superadmin,Admin');
+    
+    Route::resource('/order', \App\Http\Controllers\OrderController::class)->only(['index', 'show'])->middleware('role:Superadmin,Admin,Staff');
+    Route::patch('/order/{order}/status', [\App\Http\Controllers\OrderController::class, 'updateStatus'])->name('order.status')->middleware('role:Superadmin,Admin');
+
     Route::get('/katalog', [\App\Http\Controllers\KatalogController::class, 'index'])->name('katalog.index');
+    Route::resource('/myorder', \App\Http\Controllers\MyOrderController::class)->only(['index', 'show'])->middleware('role:Customer');
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::put('/setting/{setting}/update', [SettingController::class, 'update'])->name('setting.update');
 });

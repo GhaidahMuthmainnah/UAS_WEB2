@@ -284,6 +284,16 @@
                 </a>
             </li>
 
+            @if (in_array(Auth::user()->role, ['Superadmin', 'Admin', 'Staff']))
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('order.*') ? '' : 'collapsed' }}"
+                        href="{{ route('order.index') }}">
+                        <i class='bx bx-cart'></i>
+                        <span>Pesanan (Orders)</span>
+                    </a>
+                </li>
+            @endif
+
             @if (in_array(Auth::user()->role, ['Superadmin', 'Admin']))
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('user.*') ? '' : 'collapsed' }}"
@@ -314,6 +324,13 @@
                         href="{{ route('katalog.index') }}">
                         <i class='bx bx-store-alt'></i>
                         <span>Katalog Publik</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('myorder.*') ? '' : 'collapsed' }}"
+                        href="{{ route('myorder.index') }}">
+                        <i class='bx bx-history'></i>
+                        <span>Riwayat Pesanan</span>
                     </a>
                 </li>
             @endif
