@@ -25,7 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/dashboard/update', [DashboardController::class, 'update'])->name('dashboard.update');
 
     Route::resource('/user', UserController::class)->middleware('role:Superadmin');
-
+    
+    Route::resource('/menu', \App\Http\Controllers\MenuController::class)->middleware('role:Superadmin,Admin');
+    Route::resource('/package', \App\Http\Controllers\PackageController::class)->middleware('role:Superadmin,Admin');
+    Route::get('/katalog', [\App\Http\Controllers\KatalogController::class, 'index'])->name('katalog.index');
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::put('/setting/{setting}/update', [SettingController::class, 'update'])->name('setting.update');
 });

@@ -284,12 +284,36 @@
                 </a>
             </li>
 
-            @if (Auth::user()->role == 'Superadmin')
+            @if (in_array(Auth::user()->role, ['Superadmin', 'Admin']))
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('user.*') ? '' : 'collapsed' }}"
                         href="{{ route('user.index') }}">
                         <i class='bx bx-user-pin'></i>
                         <span>User</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('menu.*') ? '' : 'collapsed' }}"
+                        href="{{ route('menu.index') }}">
+                        <i class='bx bx-food-menu'></i>
+                        <span>Menu</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('package.*') ? '' : 'collapsed' }}"
+                        href="{{ route('package.index') }}">
+                        <i class='bx bx-box'></i>
+                        <span>Package</span>
+                    </a>
+                </li>
+            @endif
+
+            @if (Auth::user()->role == 'Customer')
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('katalog.*') ? '' : 'collapsed' }}"
+                        href="{{ route('katalog.index') }}">
+                        <i class='bx bx-store-alt'></i>
+                        <span>Katalog Publik</span>
                     </a>
                 </li>
             @endif
