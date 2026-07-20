@@ -91,4 +91,18 @@ class MyOrderController extends Controller
 
         return redirect()->route('myorder.index')->withSuccess('Yeay! Pesanan berhasil dibuat dan sedang menunggu konfirmasi admin.');
     }
+
+    public function destroy($id)
+    {
+        $order = Order::findOrFail($id);
+        
+        // Pastikan hanya pemilik pesanan yang bisa menghapus
+        if ($order->customer_id != Auth::id()) {
+            abort(403, 'Unauthorized access to this order.');
+        }
+
+        $order->delete();
+
+        return redirect()->route('myorder.index')->withSuccess('Riwayat pesanan berhasil dihapus dari daftar Anda.');
+    }
 }

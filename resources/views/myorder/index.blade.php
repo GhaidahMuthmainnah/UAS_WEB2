@@ -46,9 +46,18 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('myorder.show', $order) }}" class="btn btn-info btn-sm text-white">
-                                    <i class='bx bx-show'></i> Detail
-                                </a>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('myorder.show', $order) }}" class="btn btn-info btn-sm text-white">
+                                        <i class='bx bx-show'></i> Detail
+                                    </a>
+                                    <form action="{{ route('myorder.destroy', $order) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus riwayat pesanan ini? Aksi ini tidak dapat dibatalkan.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm text-white" title="Hapus Riwayat">
+                                            <i class='bx bx-trash'></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty

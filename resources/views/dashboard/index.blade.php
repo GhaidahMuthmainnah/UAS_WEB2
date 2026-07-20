@@ -1,218 +1,175 @@
 <x-app>
-
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <!-- Welcome Card -->
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body p-4">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h3 class="fw-bold mb-3">
-                        <i class='bx bx-smile text-primary me-2'></i>
-                        Selamat Datang, {{ Auth::user()->name }}!
-                    </h3>
-                    <p class="text-muted mb-0">
-                        Anda login sebagai <span class="badge bg-primary">{{ Auth::user()->role }}</span>
-                    </p>
-                    <p class="text-muted mt-2">
-                        <i class='bx bx-time-five me-1'></i>
-                        {{ now()->isoFormat('dddd, D MMMM YYYY - HH:mm') }}
-                    </p>
+    <div class="row">
+        <!-- Sales Card -->
+        <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card shadow-sm border-0 border-bottom border-success border-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-success">Pendapatan <span>| Total</span></h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success" style="width: 60px; height: 60px; font-size: 32px;">
+                            <i class="bx bx-wallet"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h5 class="fw-bold mb-0">Rp {{ number_format($revenue, 0, ',', '.') }}</h5>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4 text-center">
-                    <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('niceadmin/img/noprofil.png') }}"
-                        alt="Avatar" class="img-fluid rounded-circle border border-3 border-primary"
-                        style="max-width: 150px;">
+            </div>
+        </div>
+
+        <!-- Expense Card -->
+        <div class="col-xxl-4 col-md-6">
+            <div class="card info-card revenue-card shadow-sm border-0 border-bottom border-danger border-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-danger">Pengeluaran <span>| Total</span></h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-danger bg-opacity-10 text-danger" style="width: 60px; height: 60px; font-size: 32px;">
+                            <i class="bx bx-money-withdraw"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h5 class="fw-bold mb-0">Rp {{ number_format($expense, 0, ',', '.') }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profit Card -->
+        <div class="col-xxl-4 col-md-12">
+            <div class="card info-card customers-card shadow-sm border-0 border-bottom border-primary border-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-primary">Profit Bersih <span>| Estimasi</span></h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary" style="width: 60px; height: 60px; font-size: 32px;">
+                            <i class="bx bx-line-chart"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h5 class="fw-bold mb-0">Rp {{ number_format($profit, 0, ',', '.') }}</h5>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Statistics Cards -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="text-muted mb-1 small">Total Users</p>
-                            <h2 class="fw-bold mb-0">{{ $totalUsers }}</h2>
-                        </div>
-                        <div class="bg-primary bg-opacity-10 rounded-circle p-3">
-                            <i class='bx bx-user fs-2 text-primary'></i>
-                        </div>
-                    </div>
+    <div class="row mt-3">
+        <!-- Extra Metrics -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card bg-warning text-dark shadow-sm border-0 h-100">
+                <div class="card-body py-4 text-center">
+                    <h1 class="fw-bold display-5 mb-0">{{ $activeOrdersCount }}</h1>
+                    <p class="mb-0 fw-semibold">Pesanan Aktif (Belum Lunas)</p>
+                    <small class="text-dark opacity-75">Dari Total {{ $totalOrdersCount }} Semua Pesanan</small>
                 </div>
-                <div class="card-footer bg-primary bg-opacity-10 border-0 py-2">
-                    <small class="text-primary fw-semibold">
-                        <i class='bx bx-trending-up me-1'></i>
-                        All registered users
-                    </small>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card bg-info text-white shadow-sm border-0 h-100">
+                <div class="card-body py-4 text-center">
+                    <h1 class="fw-bold display-5 mb-0">{{ $avgRating }} <i class='bx bxs-star fs-4'></i></h1>
+                    <p class="mb-0 fw-semibold">Rating Pelanggan</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="text-muted mb-1 small">Superadmin</p>
-                            <h2 class="fw-bold mb-0">{{ $superadminCount }}</h2>
-                        </div>
-                        <div class="bg-success bg-opacity-10 rounded-circle p-3">
-                            <i class='bx bx-shield fs-2 text-success'></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer bg-success bg-opacity-10 border-0 py-2">
-                    <small class="text-success fw-semibold">
-                        <i class='bx bx-check-circle me-1'></i>
-                        Full access users
-                    </small>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="text-muted mb-1 small">Admin</p>
-                            <h2 class="fw-bold mb-0">{{ $adminCount }}</h2>
-                        </div>
-                        <div class="bg-info bg-opacity-10 rounded-circle p-3">
-                            <i class='bx bx-user-check fs-2 text-info'></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer bg-info bg-opacity-10 border-0 py-2">
-                    <small class="text-info fw-semibold">
-                        <i class='bx bx-user-circle me-1'></i>
-                        Standard access users
-                    </small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-header bg-white border-bottom">
-            <h5 class="mb-0 fw-bold">
-                <i class='bx bx-rocket me-2 text-primary'></i>
-                Quick Actions
-            </h5>
-        </div>
-        <div class="card-body">
-            <div class="row g-3 mt-2">
-                <div class="col-md-3">
-                    <a href="{{ route('user.index') }}" class="text-decoration-none">
-                        <div class="card border border-primary border-opacity-25 h-100 hover-shadow">
-                            <div class="card-body text-center mt-4">
-                                <i class='bx bx-user-plus fs-1 text-primary mb-2'></i>
-                                <h6 class="mb-0">Manage Users</h6>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="{{ route('setting.index') }}" class="text-decoration-none">
-                        <div class="card border border-success border-opacity-25 h-100 hover-shadow">
-                            <div class="card-body text-center mt-4"">
-                                <i class='bx bx-cog fs-1 text-success mb-2'></i>
-                                <h6 class=" mb-0">Settings</h6>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="{{ route('dashboard.show') }}" class="text-decoration-none">
-                        <div class="card border border-info border-opacity-25 h-100 hover-shadow">
-                            <div class="card-body text-center mt-4"">
-                                <i class='bx bx-user-circle fs-1 text-info mb-2'></i>
-                                <h6 class=" mb-0">My Profile</h6>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="{{ route('dashboard.edit') }}" class="text-decoration-none">
-                        <div class="card border border-warning border-opacity-25 h-100 hover-shadow">
-                            <div class="card-body text-center mt-4"">
-                                <i class='bx bx-edit fs-1 text-warning mb-2'></i>
-                                <h6 class=" mb-0">Edit Profile</h6>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- System Information -->
-    <div class="row g-3">
-        <div class="col-md-6">
+        <!-- Chart Section -->
+        <div class="col-lg-6">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0 fw-bold">
-                        <i class='bx bx-info-circle me-2 text-primary'></i>
-                        System Information
-                    </h6>
-                </div>
                 <div class="card-body">
-                    <ul class="list-unstyled mb-0 pt-4">
-                        <li class="mb-2">
-                            <i class='bx bx-check-circle text-success me-2'></i>
-                            <strong>Laravel Version:</strong> {{ app()->version() }}
-                        </li>
-                        <li class="mb-2">
-                            <i class='bx bx-check-circle text-success me-2'></i>
-                            <strong>PHP Version:</strong> {{ PHP_VERSION }}
-                        </li>
-                        <li class="mb-2">
-                            <i class='bx bx-check-circle text-success me-2'></i>
-                            <strong>Environment:</strong> {{ config('app.env') }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 pt-4">
-                <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0 fw-bold">
-                        <i class='bx bx-user me-2 text-primary'></i>
-                        Your Account
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled mb-0">
-                        <li class="mb-2">
-                            <i class='bx bx-envelope text-primary me-2'></i>
-                            <strong>Email:</strong> {{ Auth::user()->email }}
-                        </li>
-                        <li class="mb-2">
-                            <i class='bx bx-calendar text-primary me-2'></i>
-                            <strong>Member Since:</strong> {{ Auth::user()->created_at->format('d M Y') }}
-                        </li>
-                        <li class="mb-2">
-                            <i class='bx bx-time text-primary me-2'></i>
-                            <strong>Last Updated:</strong> {{ Auth::user()->updated_at->diffForHumans() }}
-                        </li>
-                    </ul>
+                    <h5 class="card-title fw-bold">Grafik Keuangan (6 Bulan)</h5>
+                    <div id="financeChart" style="min-height: 250px;"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="row mt-3">
+        <!-- Recent Orders -->
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Pesanan Terbaru</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>No. Order</th>
+                                    <th>Pelanggan</th>
+                                    <th>Acara</th>
+                                    <th>Tanggal Order</th>
+                                    <th>Status</th>
+                                    <th>Nilai Transaksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($recentOrders as $order)
+                                <tr>
+                                    <td><span class="text-primary fw-bold">#{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</span></td>
+                                    <td>{{ $order->customer->name ?? 'Unknown' }}</td>
+                                    <td>{{ $order->event->event_name ?? '-' }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($order->order_date)->format('d M Y') }}</td>
+                                    <td>
+                                        @if($order->status == 'Paid')
+                                            <span class="badge bg-success">Lunas</span>
+                                        @elseif($order->status == 'Pending')
+                                            <span class="badge bg-warning text-dark">Menunggu</span>
+                                        @elseif($order->status == 'Confirmed')
+                                            <span class="badge bg-info text-dark">Dikonfirmasi</span>
+                                        @else
+                                            <span class="badge bg-secondary">{{ $order->status }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="fw-semibold">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    @push('modals')
-    @endpush
-
-    @push('scripts')
-    @endpush
-
+    <!-- Script for ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#financeChart"), {
+                series: [{
+                    name: 'Pendapatan',
+                    data: {!! $chartRevenue !!}
+                }, {
+                    name: 'Pengeluaran',
+                    data: {!! $chartExpense !!}
+                }],
+                chart: {
+                    height: 250,
+                    type: 'area',
+                    toolbar: { show: false }
+                },
+                colors: ['#198754', '#dc3545'],
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.3,
+                        opacityTo: 0.4,
+                        stops: [0, 90, 100]
+                    }
+                },
+                dataLabels: { enabled: false },
+                stroke: { curve: 'smooth', width: 2 },
+                xaxis: {
+                    categories: {!! $chartMonths !!},
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) { return "Rp " + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+                    }
+                }
+            }).render();
+        });
+    </script>
 </x-app>

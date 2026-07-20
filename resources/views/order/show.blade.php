@@ -70,7 +70,10 @@
             <div class="card shadow-lg border-0 mb-4">
                 <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 fw-bold">Rincian Order #{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</h5>
-                    <div>
+                    <div class="d-flex gap-2">
+                        <button onclick="window.print()" class="btn btn-outline-danger btn-sm d-print-none shadow-sm fw-bold">
+                            <i class='bx bxs-file-pdf'></i> Export PDF
+                        </button>
                         @if($order->status == 'Paid')
                             <span class="badge bg-success fs-6 px-3 py-2"><i class="bx bx-check me-1"></i>LUNAS</span>
                         @elseif($order->status == 'Pending')
@@ -80,6 +83,38 @@
                         @endif
                     </div>
                 </div>
+
+                <!-- Custom CSS Khusus Cetak -->
+                <style>
+                    @media print {
+                        body * {
+                            visibility: hidden;
+                        }
+                        #main, #main * {
+                            visibility: visible;
+                        }
+                        #main {
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 100%;
+                            margin: 0 !important;
+                            padding: 0 !important;
+                        }
+                        .d-print-none, .sidebar, .header {
+                            display: none !important;
+                        }
+                        .card {
+                            border: none !important;
+                            box-shadow: none !important;
+                        }
+                        .col-md-4, .col-md-8 {
+                            width: 100% !important;
+                            flex: 0 0 100% !important;
+                            max-width: 100% !important;
+                        }
+                    }
+                </style>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
