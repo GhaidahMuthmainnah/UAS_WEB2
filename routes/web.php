@@ -37,6 +37,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/katalog', [\App\Http\Controllers\KatalogController::class, 'index'])->name('katalog.index');
     Route::resource('/myorder', \App\Http\Controllers\MyOrderController::class)->only(['index', 'show'])->middleware('role:Customer');
+    
+    Route::resource('/ingredient', \App\Http\Controllers\IngredientController::class)->except(['create', 'show', 'edit'])->middleware('role:Superadmin,Admin');
+    Route::resource('/expense', \App\Http\Controllers\ExpenseRecordController::class)->except(['create', 'show', 'edit'])->middleware('role:Superadmin,Admin');
+
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::put('/setting/{setting}/update', [SettingController::class, 'update'])->name('setting.update');
 });

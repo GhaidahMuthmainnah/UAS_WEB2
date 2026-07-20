@@ -302,11 +302,28 @@
             @endif
 
             @if (in_array(Auth::user()->role, ['Superadmin', 'Admin']))
+                <li class="nav-heading">Keuangan & Dapur</li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('ingredient.*') ? '' : 'collapsed' }}"
+                        href="{{ route('ingredient.index') }}">
+                        <i class='bx bx-box'></i>
+                        <span>Bahan Baku (Inventory)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('expense.*') ? '' : 'collapsed' }}"
+                        href="{{ route('expense.index') }}">
+                        <i class='bx bx-money-withdraw'></i>
+                        <span>Pengeluaran (Expense)</span>
+                    </a>
+                </li>
+
+                <li class="nav-heading">Manajemen Sistem</li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('user.*') ? '' : 'collapsed' }}"
                         href="{{ route('user.index') }}">
-                        <i class='bx bx-user-pin'></i>
-                        <span>User</span>
+                        <i class='bx bx-user'></i>
+                        <span>User Management</span>
                     </a>
                 </li>
                 <li class="nav-item">

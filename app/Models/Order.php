@@ -27,4 +27,9 @@ class Order extends Model
     {
         return $this->hasOne(DeliverySchedule::class);
     }
+
+    public function expenseRecords()
+    {
+        return $this->hasMany(ExpenseRecord::class);
+    }
 }

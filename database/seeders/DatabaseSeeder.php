@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             PackageSeeder::class,
             OrderSeeder::class,
             DeliveryScheduleSeeder::class,
+            IngredientSeeder::class,
+            ExpenseRecordSeeder::class,
         ]);
     }
 }
