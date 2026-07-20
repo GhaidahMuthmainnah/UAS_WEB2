@@ -6,7 +6,17 @@
     <div class="col-md-8">
         <h4 class="fw-bold mb-3">{{ $user->name }}</h4>
         <div class="mb-3">
-            <span class="badge bg-primary fs-6">{{ $user->role }}</span>
+            @if($user->role == 'Superadmin')
+                <span class="badge bg-danger fs-6">{{ $user->role }}</span>
+            @elseif($user->role == 'Admin')
+                <span class="badge bg-success fs-6">{{ $user->role }}</span>
+            @elseif($user->role == 'Staff')
+                <span class="badge bg-primary fs-6">{{ $user->role }}</span>
+            @elseif($user->role == 'Customer')
+                <span class="badge bg-warning text-dark fs-6">{{ $user->role }}</span>
+            @else
+                <span class="badge bg-secondary fs-6">{{ $user->role }}</span>
+            @endif
         </div>
         <div class="list-group list-group-flush">
             <div class="list-group-item px-0 border-0">
@@ -16,6 +26,26 @@
                     </div>
                     <div class="col-8 fw-semibold">
                         {{ $user->email }}
+                    </div>
+                </div>
+            </div>
+            <div class="list-group-item px-0 border-0">
+                <div class="row">
+                    <div class="col-4 text-muted">
+                        <i class='bx bx-phone me-2'></i>Phone
+                    </div>
+                    <div class="col-8 fw-semibold">
+                        {{ $user->phone ?? '-' }}
+                    </div>
+                </div>
+            </div>
+            <div class="list-group-item px-0 border-0">
+                <div class="row">
+                    <div class="col-4 text-muted">
+                        <i class='bx bx-map me-2'></i>Address
+                    </div>
+                    <div class="col-8 fw-semibold">
+                        {{ $user->address ?? '-' }}
                     </div>
                 </div>
             </div>

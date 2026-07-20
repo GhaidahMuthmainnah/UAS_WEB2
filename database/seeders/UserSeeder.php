@@ -18,11 +18,50 @@ class UserSeeder extends Seeder
                 'name' => 'Ghaidah',
                 'email' => 'gaidah@gmail.com',
                 'role' => 'Superadmin',
+                'phone' => '0811111111',
+                'address' => 'Jl. Superadmin No. 1',
             ],
             [
-                'name' => 'Joh Doe',
+                'name' => 'Pemilik Catering',
                 'email' => 'admin@gmail.com',
                 'role' => 'Admin',
+                'phone' => '0822222222',
+                'address' => 'Jl. Admin No. 2',
+            ],
+            [
+                'name' => 'Budi Staff',
+                'email' => 'staff1@gmail.com',
+                'role' => 'Staff',
+                'phone' => '0833333333',
+                'address' => 'Jl. Staff No. 3',
+            ],
+            [
+                'name' => 'Siti Staff',
+                'email' => 'staff2@gmail.com',
+                'role' => 'Staff',
+                'phone' => '0844444444',
+                'address' => 'Jl. Staff No. 4',
+            ],
+            [
+                'name' => 'Pelanggan Satu',
+                'email' => 'customer1@gmail.com',
+                'role' => 'Customer',
+                'phone' => '0855555555',
+                'address' => 'Jl. Customer No. 5',
+            ],
+            [
+                'name' => 'Pelanggan Dua',
+                'email' => 'customer2@gmail.com',
+                'role' => 'Customer',
+                'phone' => '0866666666',
+                'address' => 'Jl. Customer No. 6',
+            ],
+            [
+                'name' => 'Pelanggan Tiga',
+                'email' => 'customer3@gmail.com',
+                'role' => 'Customer',
+                'phone' => '0877777777',
+                'address' => 'Jl. Customer No. 7',
             ],
         ];
 
@@ -35,6 +74,8 @@ class UserSeeder extends Seeder
                 'name' => $user['name'],
                 'email' => $user['email'],
                 'role' => $user['role'],
+                'phone' => $user['phone'],
+                'address' => $user['address'],
             ]);
         }
     }

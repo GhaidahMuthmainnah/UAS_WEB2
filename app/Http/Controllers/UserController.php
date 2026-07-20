@@ -38,7 +38,9 @@ class UserController extends Controller
 
         $validate = $request->validate([
             'name' => 'required',
-            'role' => 'required',
+            'role' => 'required|in:Superadmin,Admin,Staff,Customer',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
             'password' => 'required|min:8',
             'passwordconfirm' => 'required|same:password',
             'email' => 'required|email|lowercase|unique:users,email',
@@ -108,7 +110,9 @@ class UserController extends Controller
 
         $validate = $request->validate([
             'name' => 'required',
-            'role' => 'required',
+            'role' => 'required|in:Superadmin,Admin,Staff,Customer',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
             'password' => 'nullable|min:8',
             'passwordconfirm' => 'nullable|same:password',
             'email' => 'required|email|lowercase|unique:users,email,' . $user->id,
@@ -137,7 +141,7 @@ class UserController extends Controller
                 }
             }
 
-            if ($user->password) {
+            if ($request->filled('password')) {
                 $validate['password'] = bcrypt($request->password);
             } else {
                 unset($validate['password']);
