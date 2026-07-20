@@ -18,6 +18,16 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function chats()
+    {
+        return $this->hasMany(Chat::class)->orderBy('created_at', 'asc');
+    }
+
     public function event()
     {
         return $this->hasOne(Event::class);

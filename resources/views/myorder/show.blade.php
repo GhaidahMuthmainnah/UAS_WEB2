@@ -68,6 +68,60 @@
                 </div>
             </div>
             @endif
+
+            <!-- Riwayat Pembayaran (Customer POV) -->
+            <div class="card shadow-sm mb-4 border-0 border-top border-success border-4 d-print-none">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Status Pembayaran</h5>
+                    @php
+                        $totalPaid = $order->payments()->where('status', 'Verified')->sum('amount');
+                        $sisa = $order->total_amount - $totalPaid;
+                    @endphp
+                    
+                    <div class="d-flex justify-content-between mb-2 mt-3">
+                        <span class="text-muted">Total Terbayar:</span>
+                        <span class="fw-bold text-success">Rp {{ number_format($totalPaid, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                        <span class="text-muted">Sisa Tagihan:</span>
+                        <span class="fw-bold text-danger">Rp {{ number_format($sisa, 0, ',', '.') }}</span>
+                    </div>
+                    
+                    <!-- Tombol Modal Bayar -->
+                    @if($sisa > 0 && $order->status != 'Cancelled')
+                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#payModal">
+                            <i class='bx bx-credit-card'></i> Bayar Tagihan (DP / Lunas)
+                        </button>
+                    @endif
+
+                    <!-- List Pembayaran Sebelumnya -->
+                    @if($order->payments->count() > 0)
+                        <div class="mt-4">
+                            <h6 class="fw-bold fs-6 border-bottom pb-2">Riwayat Transaksi</h6>
+                            <ul class="list-group list-group-flush small">
+                                @foreach($order->payments as $pay)
+                                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="d-block fw-semibold">{{ $pay->type }}</span>
+                                        <span class="text-muted">{{ $pay->created_at->format('d/m/Y') }}</span>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="d-block">Rp {{ number_format($pay->amount, 0, ',', '.') }}</span>
+                                        @if($pay->status == 'Verified')
+                                            <span class="badge bg-success">Verified</span>
+                                        @elseif($pay->status == 'Rejected')
+                                            <span class="badge bg-danger">Ditolak</span>
+                                        @else
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        @endif
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
 
         <!-- Rincian Pesanan (Invoice) -->
@@ -159,9 +213,94 @@
                     </div>
                 </div>
             </div>
-            <a href="{{ route('myorder.index') }}" class="btn btn-secondary">
+            <a href="{{ route('myorder.index') }}" class="btn btn-secondary d-print-none mb-4">
                 <i class="bx bx-arrow-back me-1"></i> Kembali ke Riwayat Pesanan
             </a>
+
+            <!-- Ruang Diskusi / Chat (Customer POV) -->
+            <div class="card shadow-sm border-0 d-print-none mb-4">
+                <div class="card-header bg-white py-3 d-flex align-items-center">
+                    <i class='bx bx-message-dots text-primary fs-4 me-2'></i>
+                    <h5 class="mb-0 fw-bold">Ruang Diskusi Pesanan</h5>
+                </div>
+                <div class="card-body p-4" style="height: 350px; overflow-y: auto; background-color: #f8f9fa;">
+                    @forelse($order->chats as $chat)
+                        @if($chat->sender_id == Auth::id())
+                            <!-- Chat Klien (Kanan) -->
+                            <div class="d-flex justify-content-end mb-3">
+                                <div class="bg-primary text-white p-3 rounded-3 shadow-sm" style="max-width: 75%;">
+                                    <p class="mb-1">{{ $chat->message }}</p>
+                                    <small class="text-white-50 d-block text-end" style="font-size: 0.7rem;">{{ $chat->created_at->format('H:i') }}</small>
+                                </div>
+                            </div>
+                        @else
+                            <!-- Chat Admin/Staff (Kiri) -->
+                            <div class="d-flex justify-content-start mb-3">
+                                <div class="bg-white border p-3 rounded-3 shadow-sm" style="max-width: 75%;">
+                                    <small class="fw-bold text-dark d-block mb-1">{{ $chat->sender->name }} (Staff)</small>
+                                    <p class="mb-1 text-dark">{{ $chat->message }}</p>
+                                    <small class="text-muted d-block text-end" style="font-size: 0.7rem;">{{ $chat->created_at->format('H:i') }}</small>
+                                </div>
+                            </div>
+                        @endif
+                    @empty
+                        <div class="text-center text-muted h-100 d-flex flex-column justify-content-center align-items-center">
+                            <i class='bx bx-chat fs-1 mb-2 text-light'></i>
+                            <p>Belum ada percakapan.<br>Silakan kirim pesan jika Anda memiliki pertanyaan.</p>
+                        </div>
+                    @endforelse
+                </div>
+                <div class="card-footer bg-white border-top-0 p-3">
+                    <form action="{{ route('chat.store', $order) }}" method="POST" class="d-flex gap-2">
+                        @csrf
+                        <input type="text" name="message" class="form-control rounded-pill px-4" placeholder="Ketik pesan Anda..." required autocomplete="off">
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm"><i class='bx bxs-send'></i></button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Modal Form Bayar -->
+    @if($order->status != 'Cancelled')
+    <div class="modal fade d-print-none" id="payModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form action="{{ route('payment.store') }}" method="POST" enctype="multipart/form-data" class="modal-content border-0 shadow-lg">
+                @csrf
+                <div class="modal-header bg-success text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class='bx bx-wallet'></i> Formulir Pembayaran</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted small mb-4">Silakan transfer sisa tagihan ke rekening BCA 1234567890 a.n Katering Kita. Lalu unggah bukti transfer di bawah ini.</p>
+                    
+                    <input type="hidden" name="order_id" value="{{ $order->id }}">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Jenis Pembayaran</label>
+                        <select name="type" class="form-select" required>
+                            <option value="DP">Uang Muka (DP) / Cicilan</option>
+                            <option value="Pelunasan">Pelunasan</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nominal yang Dibayar (Rp)</label>
+                        <input type="number" name="amount" class="form-control" placeholder="Contoh: 500000" min="1000" max="{{ $sisa ?? $order->total_amount }}" required>
+                        <div class="form-text">Maksimal: Rp {{ isset($sisa) ? number_format($sisa, 0, ',', '.') : 0 }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Foto Bukti Transfer</label>
+                        <input type="file" name="payment_proof" class="form-control" accept="image/*" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success px-4 fw-bold">Kirim Bukti Pembayaran</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endif
 </x-app>

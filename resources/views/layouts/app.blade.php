@@ -349,6 +349,17 @@
                 </li>
             @endif
 
+            @if (in_array(Auth::user()->role, ['Superadmin', 'Admin', 'Staff']))
+                <li class="nav-heading">Komunikasi</li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('chat.*') ? '' : 'collapsed' }}"
+                        href="{{ route('chat.index') }}">
+                        <i class='bx bx-message-dots'></i>
+                        <span>Live Chat</span>
+                    </a>
+                </li>
+            @endif
+
             @if (Auth::user()->role == 'Customer')
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('katalog.*') ? '' : 'collapsed' }}"

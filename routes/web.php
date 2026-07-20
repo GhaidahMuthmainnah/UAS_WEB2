@@ -36,7 +36,20 @@ Route::middleware('auth')->group(function () {
     Route::patch('/delivery/{delivery}/status', [\App\Http\Controllers\DeliveryScheduleController::class, 'updateStatus'])->name('delivery.status')->middleware('role:Superadmin,Admin,Staff');
 
     Route::get('/katalog', [\App\Http\Controllers\KatalogController::class, 'index'])->name('katalog.index');
+    
+    // Rute Customer MyOrder & Payment
     Route::resource('/myorder', \App\Http\Controllers\MyOrderController::class)->only(['index', 'show', 'store', 'destroy'])->middleware('role:Customer');
+    Route::post('/payment/store', [\App\Http\Controllers\PaymentController::class, 'store'])->name('payment.store')->middleware('role:Customer');
+    
+    // Admin Verify Payment
+    Route::patch('/payment/{payment}/verify', [\App\Http\Controllers\PaymentController::class, 'verify'])->name('payment.verify')->middleware('role:Superadmin,Admin');
+
+    // Rute Diskusi/Chat (Bisa diakses siapapun yang login)
+    Route::post('/chat/{order}', [\App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
+    
+    // Rute Halaman Sentral Chat (Admin/Staff)
+    Route::get('/chats', [\App\Http\Controllers\ChatController::class, 'index'])->name('chat.index')->middleware('role:Superadmin,Admin,Staff');
+    Route::get('/chats/{order}', [\App\Http\Controllers\ChatController::class, 'show'])->name('chat.show')->middleware('role:Superadmin,Admin,Staff');
     
     Route::resource('/ingredient', \App\Http\Controllers\IngredientController::class)->except(['create', 'show', 'edit'])->middleware('role:Superadmin,Admin');
     Route::resource('/expense', \App\Http\Controllers\ExpenseRecordController::class)->except(['create', 'show', 'edit'])->middleware('role:Superadmin,Admin');
