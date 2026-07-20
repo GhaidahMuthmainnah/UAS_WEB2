@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             DeliveryScheduleSeeder::class,
             IngredientSeeder::class,
             ExpenseRecordSeeder::class,
+            TestimonialSeeder::class,
         ]);
     }
 }

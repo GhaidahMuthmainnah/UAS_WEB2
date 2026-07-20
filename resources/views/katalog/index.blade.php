@@ -62,4 +62,30 @@
             </div>
         </div>
     </div>
+
+    <!-- Testimoni Klien -->
+    <div class="mt-5 mb-4">
+        <h4 class="fw-bold mb-4 text-center"><i class='bx bxs-quote-alt-left text-primary'></i> Apa Kata Klien Kami?</h4>
+        <div class="row g-4">
+            @foreach($testimonials as $testi)
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border-0 bg-light">
+                    <div class="card-body">
+                        <div class="text-warning mb-2">
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= $testi->rating)
+                                    <i class='bx bxs-star'></i>
+                                @else
+                                    <i class='bx bx-star'></i>
+                                @endif
+                            @endfor
+                        </div>
+                        <p class="fst-italic text-secondary">"{{ $testi->review }}"</p>
+                        <h6 class="fw-bold mb-0 mt-3">- {{ $testi->customer->name ?? 'Klien' }}</h6>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
 </x-app>

@@ -327,6 +327,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('testimonial.*') ? '' : 'collapsed' }}"
+                        href="{{ route('testimonial.index') }}">
+                        <i class='bx bx-message-square-detail'></i>
+                        <span>Ulasan (Testimoni)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('menu.*') ? '' : 'collapsed' }}"
                         href="{{ route('menu.index') }}">
                         <i class='bx bx-food-menu'></i>
@@ -355,6 +362,13 @@
                         href="{{ route('myorder.index') }}">
                         <i class='bx bx-history'></i>
                         <span>Riwayat Pesanan</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('testimonial.*') ? '' : 'collapsed' }}"
+                        href="{{ route('testimonial.index') }}">
+                        <i class='bx bx-message-square-detail'></i>
+                        <span>Papan Ulasan</span>
                     </a>
                 </li>
             @endif

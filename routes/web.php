@@ -36,10 +36,20 @@ Route::middleware('auth')->group(function () {
     Route::patch('/delivery/{delivery}/status', [\App\Http\Controllers\DeliveryScheduleController::class, 'updateStatus'])->name('delivery.status')->middleware('role:Superadmin,Admin,Staff');
 
     Route::get('/katalog', [\App\Http\Controllers\KatalogController::class, 'index'])->name('katalog.index');
-    Route::resource('/myorder', \App\Http\Controllers\MyOrderController::class)->only(['index', 'show'])->middleware('role:Customer');
+    Route::resource('/myorder', \App\Http\Controllers\MyOrderController::class)->only(['index', 'show', 'store'])->middleware('role:Customer');
     
     Route::resource('/ingredient', \App\Http\Controllers\IngredientController::class)->except(['create', 'show', 'edit'])->middleware('role:Superadmin,Admin');
     Route::resource('/expense', \App\Http\Controllers\ExpenseRecordController::class)->except(['create', 'show', 'edit'])->middleware('role:Superadmin,Admin');
+
+    // Admin & Customer: Lihat Ulasan
+    Route::get('/testimonial', [\App\Http\Controllers\TestimonialController::class, 'index'])->name('testimonial.index')->middleware('role:Superadmin,Admin,Staff,Customer');
+    
+    // Admin: Moderasi Testimonial
+    Route::patch('/testimonial/{testimonial}/status', [\App\Http\Controllers\TestimonialController::class, 'updateStatus'])->name('testimonial.status')->middleware('role:Superadmin,Admin');
+    Route::delete('/testimonial/{testimonial}', [\App\Http\Controllers\TestimonialController::class, 'destroy'])->name('testimonial.destroy')->middleware('role:Superadmin,Admin');
+
+    // Customer: Submit Testimonial
+    Route::post('/testimonial', [\App\Http\Controllers\TestimonialController::class, 'store'])->name('testimonial.store')->middleware('role:Customer');
 
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::put('/setting/{setting}/update', [SettingController::class, 'update'])->name('setting.update');

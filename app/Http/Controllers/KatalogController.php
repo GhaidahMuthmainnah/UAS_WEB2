@@ -11,8 +11,9 @@ class KatalogController extends Controller
     {
         return view('katalog.index', [
             'title' => 'Katalog Menu & Paket',
-            'menus' => Menu::where('is_available', true)->get(),
-            'packages' => Package::all(),
+            'menus' => Menu::latest()->get(),
+            'packages' => Package::latest()->get(),
+            'testimonials' => \App\Models\Testimonial::with('customer')->where('is_published', true)->latest()->take(5)->get()
         ]);
     }
 }
